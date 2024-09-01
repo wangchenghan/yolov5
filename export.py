@@ -1403,7 +1403,8 @@ def run(
         y = model(im)  # dry runs
     if half and not coreml:
         im, model = im.half(), model.half()  # to FP16
-    shape = tuple((y[0] if isinstance(y, tuple) else y).shape)  # model output shape
+    # shape = tuple((y[0] if isinstance(y, tuple) else y).shape)  # model output shape
+    shape = tuple(y[0].shape)
     metadata = {"stride": int(max(model.stride)), "names": model.names}  # model metadata
     LOGGER.info(f"\n{colorstr('PyTorch:')} starting from {file} with output shape {shape} ({file_size(file):.1f} MB)")
 
@@ -1510,7 +1511,7 @@ def parse_opt(known=False):
     parser.add_argument("--dynamic", action="store_true", help="ONNX/TF/TensorRT: dynamic axes")
     parser.add_argument("--simplify", action="store_true", help="ONNX: simplify model")
     parser.add_argument("--mlmodel", action="store_true", help="CoreML: Export in *.mlmodel format")
-    parser.add_argument("--opset", type=int, default=17, help="ONNX: opset version")
+    parser.add_argument("--opset", type=int, default=12, help="ONNX: opset version")
     parser.add_argument("--verbose", action="store_true", help="TensorRT: verbose log")
     parser.add_argument("--workspace", type=int, default=4, help="TensorRT: workspace size (GB)")
     parser.add_argument("--nms", action="store_true", help="TF: add NMS to model")
